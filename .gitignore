@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.env
+*.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Django
+db.sqlite3
+staticfiles/
+mediafiles/
+
+# Docker
+*.log
+.docker/
+docker-compose.yml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Virtual Environment
+# Specifically ignore common virtual environment folder names
+.env/
+.venv/
