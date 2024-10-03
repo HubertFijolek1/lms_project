@@ -25,7 +25,8 @@ To get started, clone the repository:
 
 ```bash
 git clone https://github.com/HubertFijolek1/lms_project.git
-cd lms_project```
+cd lms_project
+```
 
 ### setting up the project
 
@@ -37,12 +38,14 @@ the project is containerized using docker. follow these steps to get everything 
 2. **build and run the containers**:
 
 ```bash
-docker-compose up --build```
+docker-compose up --build
+```
 
 3. **apply Django Migrations: Once the containers are running, apply the initial Django migrations to set up the database schema:
 
 ```bash
-docker-compose exec web python manage.py migrate```
+docker-compose exec web python manage.py migrate
+```
 
 4. **Access the Development Server: The application will be available at http://localhost:8000.
 
@@ -64,7 +67,8 @@ lms_project/
 │   ├── wsgi.py
 ├── manage.py
 ├── db.sqlite3  (if using sqlite for dev)
-└── .gitignore```
+└── .gitignore
+```
 
 ### technologies used
 
@@ -82,22 +86,26 @@ lms_project/
 if you encounter any issues, ensure docker is running and the `docker-compose.yml` file is correctly set up. you can also check the container logs:
 
 ```bash
-docker-compose logs```
+docker-compose logs
+```
 
 You can stop the containers using:
 
 ```bash
 docker-compose down
-If you need to rebuild the containers after changes, use:```
+If you need to rebuild the containers after changes, use:
+```
 
 ```bash
-docker-compose up --build```
+docker-compose up --build
+```
 
 For further debugging, it's helpful to check the individual service logs (e.g., web or database):
 
 ```bash
 docker-compose logs <service-name>
-Replace <service-name> with the appropriate container name, such as web or db.```
+Replace <service-name> with the appropriate container name, such as web or db.
+```
 
 ### Common Issues
 
@@ -113,7 +121,8 @@ Replace <service-name> with the appropriate container name, such as web or db.``
    - Run the following command to collect static files:
 
    ```bash
-   docker-compose exec web python manage.py collectstatic```
+   docker-compose exec web python manage.py collectstatic
+   ```
 
 ### additional resources
 
