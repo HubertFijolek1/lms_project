@@ -1,15 +1,28 @@
-# Dockerfile inside docker/
+# Use the official Python image from the Docker Hub
 FROM python:3.9-slim
 
-WORKDIR /usr/src/app
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-# Copy requirements.txt from the docker/ folder into the container
-COPY requirements.txt . 
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    build-essential
 
+# Create and set the working directory
+RUN mkdir /app
+WORKDIR /app
+
+# Install Python dependencies
+COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+# Copy the project files
+COPY . /app/
 
+# Expose the port
 EXPOSE 8000
 
+# Run the application
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
