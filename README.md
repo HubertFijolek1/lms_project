@@ -93,8 +93,9 @@ You can stop the containers using:
 
 ```bash
 docker-compose down
+'''
 If you need to rebuild the containers after changes, use:
-```
+
 
 ```bash
 docker-compose up --build
@@ -104,8 +105,10 @@ For further debugging, it's helpful to check the individual service logs (e.g., 
 
 ```bash
 docker-compose logs <service-name>
-Replace <service-name> with the appropriate container name, such as web or db.
 ```
+
+Replace <service-name> with the appropriate container name, such as web or db.
+
 
 ### Common Issues
 
@@ -119,6 +122,7 @@ Replace <service-name> with the appropriate container name, such as web or db.
 3. **Static files not loading**:
    - Make sure the `STATIC_URL` and `STATICFILES_DIRS` are correctly configured in `settings.py`.
    - Run the following command to collect static files:
+
 
    ```bash
    docker-compose exec web python manage.py collectstatic
