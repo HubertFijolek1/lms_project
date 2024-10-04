@@ -41,13 +41,13 @@ the project is containerized using docker. follow these steps to get everything 
 docker-compose up --build
 ```
 
-3. **apply Django Migrations: Once the containers are running, apply the initial Django migrations to set up the database schema:
+3. apply Django Migrations: Once the containers are running, apply the initial Django migrations to set up the database schema:
 
 ```bash
 docker-compose exec web python manage.py migrate
 ```
 
-4. **Access the Development Server: The application will be available at http://localhost:8000.
+4. Access the Development Server: The application will be available at http://localhost:8000.
 
 ### project structure
 
@@ -93,7 +93,7 @@ You can stop the containers using:
 
 ```bash
 docker-compose down
-'''
+```
 If you need to rebuild the containers after changes, use:
 
 
