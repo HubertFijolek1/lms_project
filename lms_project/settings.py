@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'allauth',                       # Core django-allauth app
     'allauth.account',               # Handles user accounts
     'allauth.socialaccount',         # Enables social authentication (optional)
-    
+    'users',
 ]
 
 SITE_ID = 1
@@ -139,6 +139,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Default
     'allauth.account.auth_backends.AuthenticationBackend',  # django-allauth
 ]
+AUTH_USER_MODEL = 'users.CustomUser'
+
 
 # django-allauth settings
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'  # 'username', 'email', or 'username_email'
