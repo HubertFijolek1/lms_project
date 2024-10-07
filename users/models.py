@@ -7,7 +7,9 @@ class CustomUser(AbstractUser):
         ('teacher', 'Teacher'),
         ('admin', 'Admin'),
     )
-    role = models.CharField(max_length=20, choices=USER_ROLES, default='student')
+    role = models.CharField(
+        max_length=20, choices=USER_ROLES, default='student'
+    )
 
     def is_student(self):
         return self.role == 'student'

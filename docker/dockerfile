@@ -12,21 +12,23 @@ RUN echo 'deb http://ftp.us.debian.org/debian bookworm main' > /etc/apt/sources.
     apt-get install -y --no-install-recommends \
     apt-transport-https \
     libpq-dev \
-    build-essential && \
-    apt-get clean && \
+    build-essential \
+    gcc \
+    python3-dev \
+    libssl-dev \
+    && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 
 # Create and set the working directory
-RUN mkdir /app
-WORKDIR /app
+WORKDIR /usr/src/app
 
 # Install Python dependencies
-COPY docker/requirements.txt /app/
+COPY docker/requirements.txt /usr/src/app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the project files
-COPY . /app/
+COPY . /usr/src/app/
 
 # Expose the port
 EXPOSE 8000
