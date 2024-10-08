@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'allauth.account',               # Handles user accounts
     'allauth.socialaccount',         # Enables social authentication (optional)
     'users',
+    'courses',
 ]
 
 SITE_ID = 1
