@@ -59,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'lms_project.middleware.NoCacheMiddleware',
     # 'allauth.account.middleware.AccountMiddleware',
 ]
 
@@ -144,6 +145,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',  # django-allauth
 ]
 AUTH_USER_MODEL = 'users.CustomUser'
+ACCOUNT_LOGOUT_ON_GET = True  # Ensures that the user is logged out when the logout URL is accessed.
 
 
 # django-allauth settings
