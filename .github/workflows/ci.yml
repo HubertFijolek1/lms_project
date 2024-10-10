@@ -9,46 +9,75 @@ on:
       - main
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-    
+
     services:
-      db:
+      postgres:
         image: postgres:13
         env:
-          POSTGRES_DB: lms_db
-          POSTGRES_USER: admin
-          POSTGRES_PASSWORD: admin
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        options: >-
+          --health-cmd="pg_isready -U ${{ secrets.POSTGRES_USER }}" 
+          --health-interval=10s 
+          --health-timeout=5s 
+          --health-retries=5
         ports:
           - 5432:5432
-        options: >-
-          --health-cmd="pg_isready -U admin -d lms_db"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v2
         with:
           python-version: '3.9'
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r docker/requirements.txt
+          pip install -r requirements.txt
 
       - name: Run Migrations
         env:
-          DATABASE_URL: postgres://admin:admin@localhost:5432/lms_db
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DEBUG: 'false'  # Hardcoding for CI, ensure production settings
+          ALLOWED_HOSTS: localhost
+          EMAIL_BACKEND: ${{ secrets.EMAIL_BACKEND }}
+          EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+          EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+          EMAIL_USE_TLS: ${{ secrets.EMAIL_USE_TLS }}
+          EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
+          EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
+          DEFAULT_FROM_EMAIL: ${{ secrets.DEFAULT_FROM_EMAIL }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_HOST: 127.0.0.1  # Use localhost for CI environment
+          POSTGRES_PORT: 5432
+          TIME_ZONE: ${{ secrets.TIME_ZONE }}
+          CSRF_TRUSTED_ORIGINS: http://localhost
         run: |
           python manage.py migrate
 
       - name: Run Tests
         env:
-          DATABASE_URL: postgres://admin:admin@localhost:5432/lms_db
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DEBUG: 'false'
+          ALLOWED_HOSTS: localhost
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_HOST: 127.0.0.1
+          POSTGRES_PORT: 5432
         run: |
-          pytest --maxfail=1 --disable-warnings
+          python manage.py test
+
+      - name: Upload Coverage Report (Optional)
+        if: success()
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-report
+          path: coverage/
