@@ -37,6 +37,9 @@ jobs:
         run: |
           pip install -r docker/requirements.txt
 
+      - name: Wait for PostgreSQL to be ready
+        run: sleep 10  # Wait for the database to be fully up and ready
+
       - name: Run Migrations
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
@@ -52,7 +55,7 @@ jobs:
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_HOST: localhost  # Use 'localhost' as the service host
+          POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432
           TIME_ZONE: ${{ secrets.TIME_ZONE }}
           CSRF_TRUSTED_ORIGINS: ${{ secrets.CSRF_TRUSTED_ORIGINS }}
