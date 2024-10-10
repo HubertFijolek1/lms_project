@@ -31,7 +31,6 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'lms_project',
     'django.contrib.admin',
