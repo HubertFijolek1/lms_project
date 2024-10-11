@@ -48,7 +48,7 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install --upgrade pip
-          pip install -r docker/equirements.txt
+          pip install -r docker/requirements.txt
 
       - name: Wait for DNS resolution
         run: sleep 10
