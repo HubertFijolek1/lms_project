@@ -13,7 +13,11 @@ jobs:
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_PORT: 5432
+        options: >-
+          --health-cmd "pg_isready -h postgres -p 5432"
+          --health-interval 10s
+          --health-timeout 10s
+          --health-retries 10
 
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
@@ -29,7 +33,7 @@ jobs:
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      POSTGRES_HOST: 'localhost'
+      POSTGRES_HOST: 'postgres'
       POSTGRES_PORT: 5432
       TIME_ZONE: 'UTC'
       CSRF_TRUSTED_ORIGINS: 'http://localhost,http://127.0.0.1'
@@ -50,12 +54,12 @@ jobs:
           pip install --upgrade pip
           pip install -r docker/requirements.txt
 
-      - name: Wait for DNS resolution
-        run: sleep 10
+      - name: Print PostgreSQL logs
+        run: docker logs $(docker ps -q --filter "ancestor=postgres:13")
 
       - name: Wait for PostgreSQL
         run: |
-          until pg_isready -h localhost -p 5432; do
+          until pg_isready -h postgres -p 5432; do
             echo "Waiting for PostgreSQL to be ready..."
             sleep 2
           done
@@ -64,3 +68,4 @@ jobs:
         run: |
           source venv/bin/activate
           python manage.py test
+        timeout-minutes: 5
