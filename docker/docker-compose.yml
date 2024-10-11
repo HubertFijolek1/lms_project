@@ -1,0 +1,53 @@
+   services:
+     reverse_proxy:
+       image: traefik:v2.5
+       command:
+         [
+           "--api.insecure=true",
+           "--providers.docker",
+           "--entrypoints.web.address=:80",
+           "--entrypoints.websecure.address=:443",
+           "--api.dashboard=true"
+         ]
+       ports:
+         - "80:80"
+         - "443:443"
+         - "8080:8080"
+       volumes:
+         - "/var/run/docker.sock:/var/run/docker.sock:ro"
+       networks:
+         - lms_network
+
+     database:
+       image: postgres:13
+       env_file:
+         - ../.env.docker  # Use Docker-specific env file
+       volumes:
+         - postgres_data:/var/lib/postgresql/data
+       networks:
+         - lms_network
+       ports:
+         - "6543:5432"
+
+     web_application:
+       build:
+         context: ..
+         dockerfile: docker/Dockerfile
+       command: python manage.py runserver 0.0.0.0:8000
+       volumes:
+         - ../:/usr/src/app
+       env_file:
+         - ../.env.docker  # Use Docker-specific env file
+       environment:
+         - ENVIRONMENT=docker
+       depends_on:
+         - database
+       networks:
+         - lms_network
+
+   volumes:
+     postgres_data:
+
+   networks:
+     lms_network:
+       driver: bridge
