@@ -25,3 +25,9 @@ Thumbs.db
 # Specifically ignore common virtual environment folder names
 .env.local/
 .venv/
+
+.env
+.env.local
+*.log
+.idea/
+
