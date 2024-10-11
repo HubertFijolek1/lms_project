@@ -1,25 +1,24 @@
-from django.db import models
-from django.contrib.auth import get_user_model
+### courses/models.py
 
-MAX_NAME_LENGTH = 255
+from django.db import models
+from django.contrib.auth.models import User
+from django.conf import settings
 
 
 class Course(models.Model):
-    name = models.CharField(max_length=MAX_NAME_LENGTH)
+    name = models.CharField(max_length=255)
     description = models.TextField()
-    availability = models.BooleanField(default=True)
+    availability = models.CharField(max_length=50)  # Ensure this line exists
 
     def __str__(self):
         return self.name
 
 
-class CourseSchedule(models.Model):
-    User = get_user_model()
-
+class Schedule(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
 
     def __str__(self):
-        return f"{self.course.name} - {self.start_time} to {self.end_time}"
+        return f"{self.course.name} - {self.user}"

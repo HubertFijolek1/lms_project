@@ -1,9 +1,6 @@
-name: Django CI
+name: CI
 
-on:
-  push:
-    branches:
-      - main
+on: [push, pull_request]
 
 jobs:
   build:
@@ -13,55 +10,53 @@ jobs:
       postgres:
         image: postgres:13
         env:
-          POSTGRES_DB: lms_db
-          POSTGRES_USER: admin
-          POSTGRES_PASSWORD: admin
-        options: >-
-          --health-cmd="pg_isready -U admin"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-        ports:
-          - 5432:5432
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.9'
-
-      - name: Install dependencies
-        run: |
-          pip install -r docker/requirements.txt
-
-      - name: Wait for PostgreSQL to be ready
-        run: sleep 10  # Wait for the database to be fully up and ready
-
-      - name: Run Migrations
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          DEBUG: ${{ secrets.DEBUG }}
-          ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
-          EMAIL_BACKEND: ${{ secrets.EMAIL_BACKEND }}
-          EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
-          EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
-          EMAIL_USE_TLS: ${{ secrets.EMAIL_USE_TLS }}
-          EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
-          EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
-          DEFAULT_FROM_EMAIL: ${{ secrets.DEFAULT_FROM_EMAIL }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_HOST: localhost
+          POSTGRES_HOST: postgres
           POSTGRES_PORT: 5432
-          TIME_ZONE: ${{ secrets.TIME_ZONE }}
-          CSRF_TRUSTED_ORIGINS: ${{ secrets.CSRF_TRUSTED_ORIGINS }}
-        run: |
-          python manage.py migrate
+        options: >-
+          --health-cmd "pg_isready -U ${{ secrets.POSTGRES_USER }}" 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
 
-      - name: Run Tests
-        run: |
-          python manage.py test
+    env:
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      DEBUG: 'False'
+      ALLOWED_HOSTS: 'localhost,127.0.0.1'
+      EMAIL_BACKEND: 'django.core.mail.backends.smtp.EmailBackend'
+      EMAIL_HOST: 'smtp.sendgrid.net'
+      EMAIL_PORT: 587
+      EMAIL_USE_TLS: 'True'
+      EMAIL_HOST_USER: 'apikey'
+      EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
+      DEFAULT_FROM_EMAIL: ${{ secrets.DEFAULT_FROM_EMAIL }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_HOST: 'postgres'
+      POSTGRES_PORT: 5432
+      TIME_ZONE: 'UTC'
+      CSRF_TRUSTED_ORIGINS: 'http://localhost,http://127.0.0.1'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run tests
+      run: |
+        source venv/bin/activate
+        python manage.py test

@@ -10,7 +10,7 @@ def logout_and_flush_session(request):
     request.session.flush()  # Flushes the session data.
 
 
-def home_view(request):
+def home(request):
     return render(request, 'home.html')
 
 

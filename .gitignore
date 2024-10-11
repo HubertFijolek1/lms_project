@@ -16,8 +16,6 @@ mediafiles/
 
 # Docker
 *.log
-.docker/
-docker-compose.yml
 
 # OS
 .DS_Store
@@ -25,5 +23,5 @@ Thumbs.db
 
 # Virtual Environment
 # Specifically ignore common virtual environment folder names
-.env/
+.env.local/
 .venv/
