@@ -16,11 +16,10 @@ jobs:
           POSTGRES_HOST: postgres
           POSTGRES_PORT: 5432
         options: >-
-          --health-cmd "pg_isready -U ${{ secrets.POSTGRES_USER }}" 
+          --health-cmd "pg_isready -U $POSTGRES_USER" 
           --health-interval 10s 
           --health-timeout 5s 
           --health-retries 5
-
 
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
@@ -42,22 +41,22 @@ jobs:
       CSRF_TRUSTED_ORIGINS: 'http://localhost,http://127.0.0.1'
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.9'
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
 
-    - name: Install dependencies
-      run: |
-        python -m venv venv
-        source venv/bin/activate
-        pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Run tests
-      run: |
-        source venv/bin/activate
-        python manage.py test
+      - name: Run tests
+        run: |
+          source venv/bin/activate
+          python manage.py test
