@@ -1,11 +1,10 @@
 # Use the official Python image from the Docker Hub
 FROM python:3.9-slim
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+# Environment Variables
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 
-# Install system dependencies
+# Install system dependencies, update and upgrade
 RUN echo 'deb http://ftp.us.debian.org/debian bookworm main' > /etc/apt/sources.list && \
     apt-get update -y --fix-missing && \
     apt-get upgrade -y && \
@@ -18,7 +17,6 @@ RUN echo 'deb http://ftp.us.debian.org/debian bookworm main' > /etc/apt/sources.
     libssl-dev \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
 
 # Create and set the working directory
 WORKDIR /usr/src/app

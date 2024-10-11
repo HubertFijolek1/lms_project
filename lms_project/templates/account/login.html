@@ -1,18 +1,24 @@
 {% extends "base.html" %}
-
 {% block title %}Login{% endblock %}
-
 {% block content %}
-<h2>Login</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-</form>
-<p>
-    <a href="{% url 'account_reset_password' %}">Forgot your password?</a>
-</p>
-<p>
-    Don't have an account? <a href="{% url 'account_signup' %}">Register here</a>.
-</p>
+    <h2>Login</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+    <p>
+        <a href="{% url account_reset_password_url %}">Forgot your password?</a>
+    </p>
+    <p>
+        Don't have an account? <a href="{% url account_signup_url %}">Register here</a>.
+    </p>
 {% endblock %}
+{% with account_reset_password_url='account_reset_password' account_signup_url='account_signup' %}
+    {% block reset_password_url %}
+        <a href="{% url account_reset_password_url %}">Forgot your password?</a>
+    {% endblock %}
+    {% block signup_url %}
+        Don't have an account? <a href="{% url account_signup_url %}">Register here</a>.
+    {% endblock %}
+{% endwith %}
