@@ -13,11 +13,7 @@ jobs:
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        options: >-
-          --health-cmd "pg_isready -h postgres -p 5432"
-          --health-interval 10s
-          --health-timeout 10s
-          --health-retries 10
+        options: --memory=1g --cpus=1
 
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
@@ -53,6 +49,11 @@ jobs:
           source venv/bin/activate
           pip install --upgrade pip
           pip install -r docker/requirements.txt
+
+      - name: Start PostgreSQL service
+        run: |
+          sudo service postgresql start
+          sleep 20
 
       - name: Print PostgreSQL logs
         run: docker logs $(docker ps -q --filter "ancestor=postgres:13")
