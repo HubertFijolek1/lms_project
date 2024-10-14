@@ -12,7 +12,11 @@ class CustomUser(AbstractUser):
     role = models.CharField(
         max_length=20, choices=USER_ROLES, default='STUDENT'
     )
-
+    completed_courses = models.ManyToManyField(
+        'courses.Course',
+        related_name='completed_by',
+        blank=True,
+    )
     def has_role(self, role):
         return self.role == role.upper()
 
