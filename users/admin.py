@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser, UserProfile
 
 FIELDSETS = UserAdmin.fieldsets + (
-    (None, {'fields': ('role',)}),
+    (None, {'fields': ('role', 'completed_courses')}),
 )
 
 

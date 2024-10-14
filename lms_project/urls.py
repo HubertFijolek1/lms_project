@@ -6,10 +6,10 @@ from . import views
 from .views import CustomLogoutView, home
 
 ACCOUNT_LOGOUT_URL = 'accounts/logout/'
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
+    path('courses/', include('courses.urls', namespace='courses')),
     path('accounts/', include('allauth.urls')),  # django-allauth URLs
     path(ACCOUNT_LOGOUT_URL, CustomLogoutView.as_view(), name='account_logout'),
 ]
