@@ -3,24 +3,25 @@ from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser, UserProfile
 # from rest_framework_simplejwt.token_blacklist import models as blacklist_models
 # from rest_framework_simplejwt.token_blacklist import admin as blacklist_admin
+class CustomUserAdmin(UserAdmin):
+    add_fieldsets = (
+        (None, {
+            'fields': ('email', 'password1', 'password2', 'role'),
+        }),
+    )
+    fieldsets = (
+        (None, {'fields': ('email', 'password', 'role')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
+        # Add other fieldsets as needed
+    )
+    list_display = ('email', 'role', 'is_staff')
+    search_fields = ('email',)
+    ordering = ('email',)
+
 
 FIELDSETS = UserAdmin.fieldsets + (
     (None, {'fields': ('role', 'completed_courses')}),
 )
-
-
-class CustomUserAdmin(UserAdmin):
-    model = CustomUser
-
-    LIST_DISPLAY = ['username', 'email', 'role', 'is_staff', 'is_active']
-    LIST_FILTER = ['is_staff', 'is_active', 'is_superuser', 'role']
-    SEARCH_FIELDS = ['username', 'email']
-
-    list_display = LIST_DISPLAY
-    list_filter = LIST_FILTER
-    search_fields = SEARCH_FIELDS
-    fieldsets = FIELDSETS
-
 
 class UserProfileAdmin(admin.ModelAdmin):
     LIST_DISPLAY = ('user', 'bio')

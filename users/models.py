@@ -8,7 +8,7 @@ class CustomUser(AbstractUser):
         ('TEACHER', 'Teacher'),
         ('ADMIN', 'Admin'),
     )
-    email = models.EmailField(unique=True)  # Add unique=True here
+    email = models.EmailField(unique=True)
     role = models.CharField(
         max_length=20, choices=USER_ROLES, default='STUDENT'
     )
@@ -24,13 +24,11 @@ class CustomUser(AbstractUser):
     def has_role(self, role):
         return self.role == role.upper()
 
-
 User = get_user_model()
-
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return self.user.username
+        return self.user.username ,  # Note the comma here

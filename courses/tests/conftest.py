@@ -10,8 +10,11 @@ def api_client():
 
 @pytest.fixture
 def create_user():
-    def _create_user(email, password, role):
+    def _create_user(email, password, role, username=None):
+        if not username:
+            username = email.split('@')[0]  # Automatically generate a username based on email if not provided
         return User.objects.create_user(
+            username=username,
             email=email,
             password=password,
             role=role
