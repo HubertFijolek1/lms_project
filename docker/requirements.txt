@@ -10,3 +10,6 @@ pytest-django==4.5.2
 django-environ
 djangorestframework
 djangorestframework-simplejwt
+urllib3==1.26.16
+drf-yasg
+pytest-cov==4.1.0

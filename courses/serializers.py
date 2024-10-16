@@ -9,3 +9,8 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = '__all__'
+
+    def validate(self, data):
+        if data['maximum_capacity'] <= 0:
+            raise serializers.ValidationError("Maximum capacity must be greater than zero.")
+        return data

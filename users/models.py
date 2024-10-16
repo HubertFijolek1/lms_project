@@ -2,13 +2,13 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.auth import get_user_model
 
-
 class CustomUser(AbstractUser):
     USER_ROLES = (
         ('STUDENT', 'Student'),
         ('TEACHER', 'Teacher'),
         ('ADMIN', 'Admin'),
     )
+    email = models.EmailField(unique=True)  # Add unique=True here
     role = models.CharField(
         max_length=20, choices=USER_ROLES, default='STUDENT'
     )
@@ -17,6 +17,10 @@ class CustomUser(AbstractUser):
         related_name='completed_by',
         blank=True,
     )
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']  # 'username' is still required for user creation
+
     def has_role(self, role):
         return self.role == role.upper()
 
