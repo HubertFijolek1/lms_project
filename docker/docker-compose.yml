@@ -21,7 +21,7 @@
      database:
        image: postgres:13
        env_file:
-         - ../.env.docker  # Use Docker-specific env file
+         - ../.env.docker
        volumes:
          - postgres_data:/var/lib/postgresql/data
        networks:

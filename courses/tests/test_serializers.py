@@ -1,6 +1,5 @@
 import pytest
 from courses.serializers import CourseSerializer
-from courses.models import Course
 
 @pytest.mark.django_db
 def test_course_serializer_valid_data():

@@ -1,8 +1,7 @@
 from django.apps import AppConfig
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'  # Extracted constant
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-class CourseManagementConfig(AppConfig):  # Renamed class
-    default_auto_field = DEFAULT_AUTO_FIELD  # Used extracted constant
+class CourseManagementConfig(AppConfig):
+    default_auto_field = DEFAULT_AUTO_FIELD
     name = 'courses'

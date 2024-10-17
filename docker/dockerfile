@@ -1,7 +1,5 @@
-# Use the official Python image from the Docker Hub
 FROM python:3.9-slim
 
-# Environment Variables
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 
 # Install system dependencies, update and upgrade
@@ -21,15 +19,12 @@ RUN echo 'deb http://ftp.us.debian.org/debian bookworm main' > /etc/apt/sources.
 # Create and set the working directory
 WORKDIR /usr/src/app
 
-# Install Python dependencies
 COPY docker/requirements.txt /usr/src/app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the project files
 COPY . /usr/src/app/
 
 # Expose the port
 EXPOSE 8000
 
-# Run the application
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
