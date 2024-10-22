@@ -32,8 +32,5 @@ class UserProfileAdmin(admin.ModelAdmin):
     list_filter = LIST_FILTER
     search_fields = SEARCH_FIELDS
 
-
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
-# admin.site.register(blacklist_models.BlacklistedToken, blacklist_admin.BlacklistedTokenAdmin)
-# admin.site.register(blacklist_models.OutstandingToken, blacklist_admin.OutstandingTokenAdmin)
